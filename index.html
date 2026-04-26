@@ -67,8 +67,8 @@
     <div>
       <div class="section-label">📐 文字サイズ</div>
       <div class="range-row">
-        <input type="range" id="fontSize" min="16" max="100" value="70" oninput="update()">
-        <span class="range-val" id="fsVal">70</span>
+        <input type="range" id="fontSize" min="16" max="100" value="65" oninput="update()">
+        <span class="range-val" id="fsVal">65</span>
       </div>
     </div>
     <div>
@@ -251,7 +251,7 @@ function setFont(btn, key) {
   currentFontKey = key;
   currentFont = fontMap[key];
   // フォントごとの初期サイズ
-  const defaultSize = key === 'mincho' ? 60 : 70;
+  const defaultSize = key === 'mincho' ? 50 : 65;
   document.getElementById('fontSize').value = defaultSize;
   update();
 }

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>フェルト文字プレビュー</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Shippori+Mincho:wght@700&family=Pinyon+Script&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Barlow+Condensed:wght@400;700&family=Shippori+Mincho:wght@700&family=Pinyon+Script&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #fdf6ee; --panel: #fff9f2; --border: #e8d9c5;
@@ -56,7 +56,7 @@
 </style>
 </head>
 <body>
-<h1>🧵 フェルトデザイン 文字入れプレビュー</h1>
+<h1>🧵 フェルトデザイン文字入れ<br>プレビュー</h1>
 <p class="subtitle">テキスト・フォント・フェルトカラー・サイズをご確認ください</p>
 <div class="layout">
   <div class="controls">
@@ -67,8 +67,8 @@
     <div>
       <div class="section-label">📐 文字サイズ</div>
       <div class="range-row">
-        <input type="range" id="fontSize" min="16" max="100" value="48" oninput="update()">
-        <span class="range-val" id="fsVal">48</span>
+        <input type="range" id="fontSize" min="16" max="100" value="70" oninput="update()">
+        <span class="range-val" id="fsVal">70</span>
       </div>
     </div>
     <div>
@@ -203,7 +203,7 @@ const svgTemplate = `<?xml version="1.0" encoding="UTF-8"?>
 const bgColors = [{"name": "白", "val": "#fdfdfd"}, {"name": "黒", "val": "#000000"}, {"name": "グレー", "val": "#a2a9af"}, {"name": "ベージュ", "val": "#f8eed3"}, {"name": "紺", "val": "#003579"}, {"name": "赤", "val": "#fe3a3b"}, {"name": "青", "val": "#004aad"}, {"name": "黄", "val": "#ffd21f"}, {"name": "エンジ", "val": "#7a0000"}, {"name": "オレンジ", "val": "#ff914c"}, {"name": "緑", "val": "#2e6418"}, {"name": "紫", "val": "#401368"}];
 
 const fontMap = {
-  gothic: { css: "'Noto Sans JP', sans-serif",   label: 'ゴシック' },
+  gothic: { css: "'Barlow Condensed', sans-serif",   label: 'ゴシック' },
   mincho: { css: "'Shippori Mincho', serif",      label: '明朝体' },
   script: { css: "'Pinyon Script', cursive",      label: '筆記体' },
 };
@@ -250,6 +250,9 @@ function setFont(btn, key) {
   btn.classList.add('active');
   currentFontKey = key;
   currentFont = fontMap[key];
+  // フォントごとの初期サイズ
+  const defaultSize = key === 'mincho' ? 60 : 70;
+  document.getElementById('fontSize').value = defaultSize;
   update();
 }
 

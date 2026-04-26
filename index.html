@@ -4,9 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>フェルト文字プレビュー</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Shippori+Mincho:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Shippori+Mincho:wght@700&family=Pinyon+Script&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.cdnfonts.com/css/gelato-fresco');
   :root {
     --bg: #fdf6ee; --panel: #fff9f2; --border: #e8d9c5;
     --accent: #c8602a; --text: #3a2e26; --muted: #9a8878;
@@ -28,6 +27,8 @@
   .tab-row { display: flex; gap: 4px; background: #eeddc8; border-radius: 8px; padding: 3px; }
   .tab-btn { flex: 1; padding: 6px 4px; border: none; border-radius: 6px; font-size: 0.72rem; cursor: pointer; background: transparent; color: var(--muted); font-family: var(--font-ui); transition: all 0.15s; }
   .tab-btn.active { background: #fff; color: var(--accent); font-weight: 700; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  /* フォントプレビュー */
+  .font-preview { margin-top: 4px; font-size: 1.1rem; letter-spacing: 0.05em; color: var(--text); min-height: 1.6em; transition: font-family 0.2s; }
   .txt-color-row { display: flex; gap: 8px; align-items: center; }
   .txt-swatch { width: 34px; height: 34px; border-radius: 50%; border: 2.5px solid transparent; cursor: pointer; transition: transform 0.15s; flex-shrink: 0; }
   .txt-swatch:hover { transform: scale(1.12); }
@@ -38,56 +39,15 @@
   .bg-swatch.active { border-color: var(--text); transform: scale(1.1); box-shadow: 0 0 0 1px var(--text); }
   .bg-swatch .tip { display: none; position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.75); color: #fff; font-size: 0.6rem; padding: 2px 5px; border-radius: 4px; white-space: nowrap; pointer-events: none; }
   .bg-swatch:hover .tip { display: block; }
-
   .preview-wrap { display: flex; flex-direction: column; gap: 12px; }
   .img-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
   .img-tab { padding: 6px 16px; border: 1.5px solid var(--border); border-radius: 8px; background: #fff; font-family: var(--font-ui); font-size: 0.78rem; cursor: pointer; color: var(--muted); transition: all 0.15s; }
   .img-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-
-  /* SVGプレビューエリア */
-  .canvas-wrap {
-    position: relative;
-    border: 1.5px solid var(--border);
-    border-radius: 14px;
-    overflow: hidden;
-    background: #f5f0ea;
-    min-height: 260px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  /* フェルトテクスチャ */
-  .canvas-wrap::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Ccircle cx='1' cy='1' r='0.5' fill='rgba(255,255,255,0.06)'/%3E%3Ccircle cx='3' cy='3' r='0.5' fill='rgba(0,0,0,0.06)'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 5;
-  }
-  /* SVG表示ラップ */
-  #svgWrap {
-    width: 100%;
-    padding: 20px;
-    position: relative;
-    z-index: 2;
-  }
-  #svgWrap svg {
-    width: 100%;
-    height: auto;
-    display: block;
-    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15));
-  }
-  /* テキストオーバーレイ（SVG上） */
-  .text-overlay {
-    position: absolute;
-    white-space: nowrap;
-    pointer-events: none;
-    transition: all 0.2s;
-    z-index: 4;
-    filter: drop-shadow(1px 2px 0 rgba(0,0,0,0.22));
-  }
-
+  .canvas-wrap { position: relative; border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; background: #f5f0ea; min-height: 260px; display: flex; align-items: center; justify-content: center; }
+  .canvas-wrap::after { content: ''; position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Ccircle cx='1' cy='1' r='0.5' fill='rgba(255,255,255,0.06)'/%3E%3Ccircle cx='3' cy='3' r='0.5' fill='rgba(0,0,0,0.06)'/%3E%3C/svg%3E"); pointer-events: none; z-index: 5; }
+  #svgWrap { width: 100%; padding: 20px; position: relative; z-index: 2; }
+  #svgWrap svg { width: 100%; height: auto; display: block; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15)); }
+  .text-overlay { position: absolute; white-space: nowrap; pointer-events: none; transition: all 0.2s; z-index: 4; filter: drop-shadow(1px 2px 0 rgba(0,0,0,0.22)); }
   .info-chips { display: flex; gap: 6px; flex-wrap: wrap; }
   .chip { background: var(--panel); border: 1px solid var(--border); border-radius: 20px; padding: 3px 10px; font-size: 0.7rem; color: var(--muted); }
   .chip strong { color: var(--text); }
@@ -98,7 +58,6 @@
 <body>
 <h1>🧵 フェルトデザイン 文字入れプレビュー</h1>
 <p class="subtitle">テキスト・フォント・フェルトカラー・サイズをご確認ください</p>
-
 <div class="layout">
   <div class="controls">
     <div>
@@ -119,6 +78,7 @@
         <button class="tab-btn" onclick="setFont(this,'mincho')">明朝体</button>
         <button class="tab-btn" onclick="setFont(this,'script')">筆記体</button>
       </div>
+      <div class="font-preview" id="fontPreview">Fight</div>
     </div>
     <div>
       <div class="section-label">🎨 文字カラー</div>
@@ -142,8 +102,8 @@
     <div>
       <div class="section-label">↔️ 左右位置</div>
       <div class="range-row">
-        <input type="range" id="posX" min="10" max="90" value="50" oninput="update()">
-        <span class="range-val" id="posXVal">50</span>
+        <input type="range" id="posX" min="10" max="90" value="45" oninput="update()">
+        <span class="range-val" id="posXVal">45</span>
       </div>
     </div>
   </div>
@@ -153,7 +113,6 @@
       <button class="img-tab active" onclick="setDesign(this,0)">Front（前）</button>
       <button class="img-tab" onclick="setDesign(this,1)">Back（後ろ）</button>
     </div>
-
     <div class="canvas-wrap" id="canvasWrap">
       <div id="svgWrap"></div>
       <div class="text-overlay" id="textOverlay">Fight</div>
@@ -169,12 +128,7 @@
 </div>
 
 <script>
-// Front: 左ユニフォーム, Back: 右ユニフォーム
-const viewBoxes = [
-  '55 65 285 230',   // Front
-  '335 65 285 230',    // Back
-];
-
+const viewBoxes = ['55 65 285 230', '335 65 285 230'];
 const svgTemplate = `<?xml version="1.0" encoding="UTF-8"?>
 <svg id="_レイヤー_2" data-name="レイヤー_2" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 841.9 595.3">
   <!-- Generator: Adobe Illustrator 30.3.0, SVG Export Plug-In . SVG Version: 2.1.3 Build 182)  -->
@@ -246,32 +200,31 @@ const svgTemplate = `<?xml version="1.0" encoding="UTF-8"?>
     </g>
   </g>
 </svg>`;
-
 const bgColors = [{"name": "白", "val": "#fdfdfd"}, {"name": "黒", "val": "#000000"}, {"name": "グレー", "val": "#a2a9af"}, {"name": "ベージュ", "val": "#f8eed3"}, {"name": "紺", "val": "#003579"}, {"name": "赤", "val": "#fe3a3b"}, {"name": "青", "val": "#004aad"}, {"name": "黄", "val": "#ffd21f"}, {"name": "エンジ", "val": "#7a0000"}, {"name": "オレンジ", "val": "#ff914c"}, {"name": "緑", "val": "#2e6418"}, {"name": "紫", "val": "#401368"}];
 
 const fontMap = {
-  gothic: { css: "'Noto Sans JP', sans-serif", label: 'ゴシック' },
-  mincho: { css: "'Shippori Mincho', serif", label: '明朝体' },
-  script: { css: "'Gelato Fresco', cursive", label: '筆記体' },
+  gothic: { css: "'Noto Sans JP', sans-serif",   label: 'ゴシック' },
+  mincho: { css: "'Shippori Mincho', serif",      label: '明朝体' },
+  script: { css: "'Pinyon Script', cursive",      label: '筆記体' },
 };
 
 function hasJapanese(str) {
   return /[\u3040-\u30ff\u4e00-\u9fff\u3400-\u4dbf]/.test(str);
 }
 
-let currentFont = fontMap.gothic;
+let currentFont    = fontMap.gothic;
 let currentFontKey = 'gothic';
-let currentTxtColor = '#ffffff';
+let currentTxtColor     = '#ffffff';
 let currentTxtColorName = '白';
-let currentBgColor = bgColors[5].val;
-let currentBgColorName = bgColors[5].name;
+let currentBgColor     = bgColors[2].val;   // グレー（index 2）
+let currentBgColorName = bgColors[2].name;
 let currentDesignIdx = 0;
 
-// パレット構築
+// パレット構築（グレーをデフォルトに）
 const palette = document.getElementById('bgPalette');
 bgColors.forEach((c, i) => {
   const sw = document.createElement('div');
-  sw.className = 'bg-swatch' + (i === 5 ? ' active' : '');
+  sw.className = 'bg-swatch' + (i === 2 ? ' active' : '');
   sw.style.background = c.val;
   sw.innerHTML = `<span class="tip">${c.name}</span>`;
   sw.onclick = () => {
@@ -286,7 +239,6 @@ bgColors.forEach((c, i) => {
 
 function renderSvg() {
   const vb = viewBoxes[currentDesignIdx];
-  // viewBoxを差し替えてパスの色を適用
   let svg = svgTemplate
     .replace(/viewBox="[^"]*"/, `viewBox="${vb}"`)
     .replace(/\.fill-target \{[\s\S]*?\}/, `.fill-target { fill: ${currentBgColor}; fill-opacity: 0.9; }`);
@@ -320,13 +272,14 @@ function update() {
   renderSvg();
 
   const text = document.getElementById('textInput').value || '　';
-  const fs = document.getElementById('fontSize').value;
-  const py = document.getElementById('posY').value;
-  const px = document.getElementById('posX').value;
-  document.getElementById('fsVal').textContent = fs;
+  const fs   = document.getElementById('fontSize').value;
+  const py   = document.getElementById('posY').value;
+  const px   = document.getElementById('posX').value;
+  document.getElementById('fsVal').textContent   = fs;
   document.getElementById('posYVal').textContent = py;
   document.getElementById('posXVal').textContent = px;
 
+  // 日本語は強制ゴシック
   let effectiveFont = currentFont;
   let fontNote = '';
   if (hasJapanese(text) && currentFontKey !== 'gothic') {
@@ -334,14 +287,20 @@ function update() {
     fontNote = '（日本語はゴシックで表示）';
   }
 
+  // テキストオーバーレイ
   const ov = document.getElementById('textOverlay');
   ov.textContent = text;
   ov.style.fontFamily = effectiveFont.css;
-  ov.style.fontSize = fs + 'px';
-  ov.style.color = currentTxtColor;
-  ov.style.top = py + '%';
-  ov.style.left = px + '%';
-  ov.style.transform = 'translate(-50%, -50%)';
+  ov.style.fontSize   = fs + 'px';
+  ov.style.color      = currentTxtColor;
+  ov.style.top        = py + '%';
+  ov.style.left       = px + '%';
+  ov.style.transform  = 'translate(-50%, -50%)';
+
+  // フォントプレビュー（左パネル）
+  const fp = document.getElementById('fontPreview');
+  fp.textContent   = text || 'Fight';
+  fp.style.fontFamily = effectiveFont.css;
 
   const mm = Math.round(fs * 0.26458 * 1.5);
   document.getElementById('infoChips').innerHTML = `
@@ -351,11 +310,6 @@ function update() {
     <span class="chip">フェルトカラー: <strong><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${currentBgColor};border:1px solid #aaa;vertical-align:middle;margin-right:2px"></span>${currentBgColorName}</strong></span>
   `;
 }
-
-const gelatoLink = document.createElement('link');
-gelatoLink.rel = 'stylesheet';
-gelatoLink.href = 'https://fonts.cdnfonts.com/css/gelato-fresco';
-document.head.appendChild(gelatoLink);
 
 update();
 </script>
